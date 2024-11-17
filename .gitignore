@@ -1,0 +1,34 @@
+# Excluir el entorno virtual de conda
+virta-sql-tutorial/
+
+# Excluir la carpeta de compilación de Jupyter Book
+my-sql-tutorial/_build/
+
+# Archivos y carpetas temporales de Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Archivos temporales del sistema
+*.tmp
+*.log
+*.bak
+*.swp
+.DS_Store
+
+# Archivos de cache y configuración de Python
+__pycache__/
+*.py[cod]
+*.ipynb_checkpoints
+
+# Archivos ocultos generados por Git y otros sistemas
+.git/
+*.~undo-tree
+*.orig
+*.rej
+
+# Exclusión de binarios o ejecutables
+*.exe
+*.dll
+*.so

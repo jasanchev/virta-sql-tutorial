@@ -1,0 +1,16 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+chapters:
+  - file: crear-servidor
+  - file: crear-login
+  - file: crear-base-datos
+  - file: conectar-python
+  - file: crear-tabla
+  - file: crear-catalogo
+  - file: crear-indice
+  - file: stored-procedure
+  - file: cursores
+  - file: conclusion

@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Crear un catálogo Full-Text Search (FTS) en SQL Server &#8212; Tutorial de SQL con Python</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'crear-catalogo';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Crear y Asociar Índices al Catálogo Full-Text al Catálogo desde Python" href="crear-indice.html" />
+    <link rel="prev" title="Creación y Verificación de una Tabla con Registros en SQL Server Usando Python" href="crear-tabla.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo-sql-tutorial.png" class="logo__image only-light" alt="Tutorial de SQL con Python - Home"/>
+    <script>document.write(`<img src="_static/logo-sql-tutorial.png" class="logo__image only-dark" alt="Tutorial de SQL con Python - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Análisis de Datos Innovador - Avanzado
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Bienvenida</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Bienvenidos al Tutorial de SQL con Python</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Creación del Servidor</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="crear-servidor.html">Creación de una Nueva Instancia de SQL Server 2022</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crear-login.html">Creación de un Login con SQL Authentication par Verificar el Servicio Conectado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crear-base-datos.html">Crear una Base de Datos en SQL Server Management Studio (SSMS)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Conectar la Instancia de SQL con Python</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="crear-odbc.html">Configuración del ODBC para SQL Server</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Configuración de Jupyter Notebook y Entorno de Python en VSCode</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="crear-entorno.html">Configuración de Jupyter Notebook y Entorno de Python en VSCode</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Interacción Avanzada con SQL desde Python</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="conectar-python.html">Conectar la Instancia de SQL Server (VIRTAMINTIC) desde Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crear-tabla.html">Creación y Verificación de una Tabla con Registros en SQL Server Usando Python</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Crear un catálogo Full-Text Search (FTS) en SQL Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crear-indice.html">Crear y Asociar Índices al Catálogo Full-Text al Catálogo desde Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="actividad2.html">Jupyter NoteBook del Tutorial</a></li>
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Conclusión</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="conclusion.html">Conclusión General</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcrear-catalogo.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/crear-catalogo.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Crear un catálogo Full-Text Search (FTS) en SQL Server</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paso-1-instalar-las-caracteristicas-full-text-search-fts-y-machine-learning-opcional">Paso 1: Instalar las características Full-Text Search (FTS) y Machine Learning (opcional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paso-2-crear-un-catalogo-fts-en-sql-server-desde-python">Paso 2: Crear un catálogo FTS en SQL Server desde Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paso-3-verificar-el-catalogo-en-ssms">Paso 3: Verificar el Catálogo en SSMS</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="crear-un-catalogo-full-text-search-fts-en-sql-server">
+<h1>Crear un catálogo Full-Text Search (FTS) en SQL Server<a class="headerlink" href="#crear-un-catalogo-full-text-search-fts-en-sql-server" title="Link to this heading">#</a></h1>
+<p>Antes de crear un catálogo para Full-Text Search (FTS) en SQL Server, es necesario asegurarse de que esta característica esté instalada y habilitada. Este tutorial cubre primero cómo instalar las características necesarias y luego cómo crear el catálogo.</p>
+<hr class="docutils" />
+<section id="paso-1-instalar-las-caracteristicas-full-text-search-fts-y-machine-learning-opcional">
+<h2>Paso 1: Instalar las características Full-Text Search (FTS) y Machine Learning (opcional)<a class="headerlink" href="#paso-1-instalar-las-caracteristicas-full-text-search-fts-y-machine-learning-opcional" title="Link to this heading">#</a></h2>
+<ol class="arabic">
+<li><p><strong>Abrir el instalador de SQL Server:</strong></p>
+<ul class="simple">
+<li><p>Ve al directorio (<strong>ExpressAdv_ENU</strong>) donde tienes el instalador de SQL Server y ejecuta el archivo <code class="docutils literal notranslate"><span class="pre">setup.exe</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Seleccionar “Agregar características a una instancia existente”:</strong></p>
+<ul class="simple">
+<li><p>En la ventana principal del instalador, selecciona <strong>“Agregar características a una instancia existente”</strong> y elige tu instancia activa de SQL Server (VIRTAMINTIC).</p></li>
+</ul>
+ <div style="text-align: center;">
+   <img src="_images/paso_7_1.png" alt="Agregar Características" width="70%">
+ </div>
+</li>
+</ol>
+<br>
+<ol class="arabic" start="3">
+<li><p><strong>Seleccionar las características:</strong></p>
+<ul>
+<li><p>En la pantalla de selección de características, asegúrate de marcar:</p>
+<ul class="simple">
+<li><p><strong>Full-Text and Semantic Extractions for Search</strong> (FTS).</p></li>
+<li><p>Opcionalmente, si deseas usar scripts de Machine Learning en un futuro, selecciona <strong>Machine Learning Services and Language Extensions</strong>.</p></li>
+</ul>
+  <div style="text-align: center;">
+    <img src="_images/paso_7_2.png" alt="Agregar Características" width="70%">
+  </div>
+</li>
+</ul>
+</li>
+</ol>
+<br>
+<ol class="arabic" start="4">
+<li><p><strong>Completar la instalación:</strong></p>
+<ul class="simple">
+<li><p>Sigue los pasos del asistente para completar la instalación.</p></li>
+<li><p>Reinicia el servicio de SQL Server si es requerido.</p></li>
+</ul>
+</li>
+<li><p><strong>Verificar que FTS está habilitado:</strong></p>
+<ul class="simple">
+<li><p>Abre <strong>SQL Server Management Studio (SSMS)</strong> y ejecuta el siguiente comando:</p></li>
+</ul>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="n">FULLTEXTSERVICEPROPERTY</span><span class="p">(</span><span class="s1">&#39;IsFullTextInstalled&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">IsFTSEnabled</span><span class="p">;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Si el resultado es <code class="docutils literal notranslate"><span class="pre">1</span></code>, FTS está habilitado.</p></li>
+</ul>
+ <div style="text-align: center;">
+    <img src="_images/paso_7_3.png" alt="Verificar FTS" width="70%">
+ </div>
+</li>
+</ol>
+<br>
+</section>
+<section id="paso-2-crear-un-catalogo-fts-en-sql-server-desde-python">
+<h2>Paso 2: Crear un catálogo FTS en SQL Server desde Python<a class="headerlink" href="#paso-2-crear-un-catalogo-fts-en-sql-server-desde-python" title="Link to this heading">#</a></h2>
+<p>Un catálogo Full-Text es un contenedor lógico que organiza índices de texto completo. El siguiente código ejecuta el comando SQL para crear el catálogo:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">create_catalog_query</span> <span class="o">=</span> <span class="s2">&quot;CREATE FULLTEXT CATALOG catalogo_movies AS DEFAULT&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">create_catalog_query</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Catálogo creado con éxito&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error en el Query: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Resultado esperado:</strong></p>
+<ul class="simple">
+<li><p>Si todo está correctamente configurado, deberías ver en consola:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Catálogo</span> <span class="n">creado</span> <span class="n">con</span> <span class="n">éxito</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Si hay un error, el mensaje correspondiente se imprimirá con detalles.</p></li>
+</ul>
+<p><strong>Recomendaciones:</strong></p>
+<ul class="simple">
+<li><p>Antes de ejecutar este código, verifica que:</p>
+<ul>
+<li><p>El servidor tiene habilitada la característica de <strong>Full-Text Search (FTS)</strong>.</p></li>
+<li><p>El usuario que estás usando tiene permisos para crear catálogos en la base de datos especificada.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="paso-3-verificar-el-catalogo-en-ssms">
+<h2>Paso 3: Verificar el Catálogo en SSMS<a class="headerlink" href="#paso-3-verificar-el-catalogo-en-ssms" title="Link to this heading">#</a></h2>
+<ol class="arabic">
+<li><p><strong>Abrir SSMS y conectar al servidor:</strong></p>
+<ul class="simple">
+<li><p>Abre <strong>SQL Server Management Studio (SSMS)</strong> y conéctate a tu instancia de SQL Server.</p></li>
+</ul>
+</li>
+<li><p><strong>Expandir la base de datos:</strong></p>
+<ul class="simple">
+<li><p>En el panel izquierdo, busca tu base de datos bajo la sección <strong>Databases</strong>.</p></li>
+</ul>
+</li>
+<li><p><strong>Navegar a los catálogos de texto completo:</strong></p>
+<ul class="simple">
+<li><p>Expande la base de datos.</p></li>
+<li><p>Busca y expande la carpeta <strong>Storage</strong>.</p></li>
+<li><p>Dentro de <strong>Storage</strong>, selecciona <strong>Full Text Catalogs</strong>.</p></li>
+</ul>
+</li>
+<li><p><strong>Buscar el catálogo creado:</strong></p>
+<ul class="simple">
+<li><p>Deberías ver el nombre del catálogo (<code class="docutils literal notranslate"><span class="pre">catalogo_movies</span></code> en tu ejemplo) listado en esta sección.</p></li>
+<li><p>Si el catálogo aparece aquí, significa que fue creado correctamente.</p></li>
+</ul>
+ <div style="text-align: center;">
+    <img src="_images/paso_7_4.png" alt="Verificar Catálogo" width="70%">
+ </div>
+</li>
+</ol>
+<br>
+<hr class="docutils" />
+<p><strong>Conclusión:</strong></p>
+<p>Con este proceso, ya tienes un catálogo Full-Text creado en SQL Server. En la sección posterior, cubriremos cómo asociar índices a este catálogo y realizar consultas utilizando Python.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="crear-tabla.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Creación y Verificación de una Tabla con Registros en SQL Server Usando Python</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="crear-indice.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Crear y Asociar Índices al Catálogo Full-Text al Catálogo desde Python</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paso-1-instalar-las-caracteristicas-full-text-search-fts-y-machine-learning-opcional">Paso 1: Instalar las características Full-Text Search (FTS) y Machine Learning (opcional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paso-2-crear-un-catalogo-fts-en-sql-server-desde-python">Paso 2: Crear un catálogo FTS en SQL Server desde Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paso-3-verificar-el-catalogo-en-ssms">Paso 3: Verificar el Catálogo en SSMS</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Lina Maria Moreno, Johnny Londoño Zambrano, Jhoan Banner Duarte, Sebastian Mosquera Salazar, Jaime Alberto Sánchez V.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

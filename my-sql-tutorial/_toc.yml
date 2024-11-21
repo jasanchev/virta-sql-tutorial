@@ -25,6 +25,7 @@ parts:
       - file: crear-tabla
       - file: crear-catalogo
       - file: crear-indice
+      - file: actividad2
   - caption: "Conclusión"
     chapters:
       - file: conclusion

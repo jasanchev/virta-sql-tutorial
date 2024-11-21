@@ -1,9 +1,9 @@
-# Crear Servidor
+# Creación de una Nueva Instancia de SQL Server 2022
+
 ```{admonition} Importante
 :class: note
 Para crear una nueva instancia de SQL Server, se asume que ya está instalada una única instancia de <b>SQL Server Express 2022</b> y <b>SQL Server Management Studio 20</b>.
 ```
-### Paso 1: Creación de una Nueva Instancia de SQL Server 2022
 
 Si ya tiene una instancia corriendo y necesitas otra:
 
@@ -78,3 +78,12 @@ Si ya tiene una instancia corriendo y necesitas otra:
   <img src="_images/paso_1_9.png" alt="Configuración del Motor" width="70%">
 </div>
 <br>
+
+10. **Culminación de la Instalación de la Nueva Instancia de SQL Server 2022:** Esta ventana indica que la instalación de SQL Server 2022 se ha completado con éxito, mostrando el estado final de las características instaladas.
+
+<div style="text-align: center;">
+  <img src="_images/paso_1_10.png" alt="Culminación de la Instalación" width="70%">
+</div>
+<br>
+
+Haz clic en el botón **Close** para finalizar el asistente. Una vez cerrada la ventana, puedes proceder a configurar y utilizar la instancia recién creada.

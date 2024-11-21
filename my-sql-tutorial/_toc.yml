@@ -2,15 +2,29 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: intro
-chapters:
-  - file: crear-servidor
-  - file: crear-login
-  - file: crear-base-datos
-  - file: conectar-python
-  - file: crear-tabla
-  - file: crear-catalogo
-  - file: crear-indice
-  - file: stored-procedure
-  - file: cursores
-  - file: conclusion
+root: index
+
+parts:
+  - caption: "Bienvenida"
+    chapters:
+      - file: intro
+  - caption: "Creación del Servidor"
+    chapters:
+      - file: crear-servidor
+      - file: crear-login
+      - file: crear-base-datos
+  - caption: "Conectar la Instancia de SQL con Python"
+    chapters:
+      - file: crear-odbc      
+  - caption: "Configuración de Jupyter Notebook y Entorno de Python en VSCode"
+    chapters:
+      - file: crear-entorno  
+  - caption: "Interacción Avanzada con SQL desde Python"
+    chapters:
+      - file: conectar-python
+      - file: crear-tabla
+      - file: crear-catalogo
+      - file: crear-indice
+  - caption: "Conclusión"
+    chapters:
+      - file: conclusion

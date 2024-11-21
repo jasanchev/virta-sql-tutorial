@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Conectar la Instancia de SQL Server (VIRTAMINTIC) desde Python
 
 Este tutorial muestra cómo establecer una conexión desde Python a una instancia de SQL Server (VIRTAMINTIC) y verificar la conexión exitosa. También incluye la visualización de la salida en un entorno de Jupyter Notebook.
@@ -65,8 +64,3 @@ Conexión exitosa
 ```
 
 ¡Ahora estás listo para interactuar de manera avanzada con SQL Server desde Python!
-=======
-# Conectar Python
-
-Contenido de la sección Conectar Python.
->>>>>>> c158c39 (Se completó el tutorial de conexión a SQL Server con Python)

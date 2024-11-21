@@ -50,7 +50,7 @@ try:
     cursor = conn.cursor() # Creación del cursor
     
     # Ejecutar una consulta
-    print("Conexión exitosa")
+    print("Conexión exitosa") # Salida
     
 except Exception as e:
     print("Error en la conexión:", e)
@@ -62,3 +62,5 @@ Al ejecutar el código en una celda de Jupyter Notebook, deberías ver la salida
 ```python
 Conexión exitosa
 ```
+
+¡Ahora estás listo para interactuar de manera avanzada con SQL Server desde Python!
